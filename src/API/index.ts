@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { List, Task } from "../redux/toDo";
+import { List, Task, createList } from "../redux/toDoReducer";
 
 const instance = axios.create({
   baseURL: "https://social-network.samuraijs.com/api/1.0/",
@@ -16,21 +16,41 @@ type GetTasksResponse = {
   totalCount: number;
   error: string;
 };
+export type CreateListResponse = {
+  data: {
+    addedDate: string;
+    id: string;
+    order: number;
+    title: string;
+  };
+  messages: Array<string>;
+  resultCode: number;
+};
 type DeleteListResponse = {
   resultCode: number;
   messages: Array<string>;
   data: Object;
 };
 export const listsAPI = {
-  getLists() {
-    return instance
-      .get<GetListsResponse>("todo-lists")
-      .then((response) => response.data);
+  // getLists() {
+  //   return instance
+  //     .get<GetListsResponse>("todo-lists")
+  //     .then((response) => response.data);
+  // },
+  async getLists() {
+    const response = await instance.get<GetListsResponse>("todo-lists");
+    return response.data;
   },
-  createList(listTitle: string) {
-    return instance
-      .post("todo-lists", { title: listTitle })
-      .then((response) => response.data);
+  // createList(listTitle: string) {
+  //   return instance
+  //     .post("todo-lists", { title: listTitle })
+  //     .then((response) => response.data);
+  // },
+  async createList(listTitle: string) {
+    const response = await instance.post<CreateListResponse>("todo-lists", {
+      title: listTitle,
+    });
+    return response.data;
   },
   deleteList(listId: number) {
     return instance
