@@ -3,13 +3,13 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
 import "./index.css";
-import App from "./Components/App";
+import AppContainer from "./Components/App/indexContainer";
 import store from "./redux/store";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <AppContainer />
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

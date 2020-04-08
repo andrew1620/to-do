@@ -1,13 +1,18 @@
 import React from "react";
 
 import StyledTask from "../../StyledComponents/StyledTask";
+import { Task as TaskType } from "../../../redux/toDoReducer";
 
-const Task: React.FC = () => {
+type Props = {
+  task: TaskType;
+};
+
+const Task: React.FC<Props> = ({ task }) => {
   return (
     <StyledTask>
       <div>
-        <div>Coursera assignment</div>
-        <div>today 11AM</div>
+        <div>{task.title}</div>
+        <div>{new Date(task.addedDate).toLocaleString()}</div>
       </div>
       <div className="btnDel">
         <span className="btnDelPic">X</span>

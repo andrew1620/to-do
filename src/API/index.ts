@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { List, Task, createList } from "../redux/toDoReducer";
+import { List, Task } from "../redux/toDoReducer";
 
 const instance = axios.create({
   baseURL: "https://social-network.samuraijs.com/api/1.0/",
@@ -10,8 +10,8 @@ const instance = axios.create({
   },
 });
 
-type GetListsResponse = Array<List>;
-type GetTasksResponse = {
+export type GetListsResponse = Array<List>;
+export type GetTasksResponse = {
   items: Array<Task>;
   totalCount: number;
   error: string;
@@ -26,36 +26,27 @@ export type CreateListResponse = {
   messages: Array<string>;
   resultCode: number;
 };
-type DeleteListResponse = {
+export type DeleteListResponse = {
   resultCode: number;
   messages: Array<string>;
   data: Object;
 };
 export const listsAPI = {
-  // getLists() {
-  //   return instance
-  //     .get<GetListsResponse>("todo-lists")
-  //     .then((response) => response.data);
-  // },
   async getLists() {
     const response = await instance.get<GetListsResponse>("todo-lists");
     return response.data;
   },
-  // createList(listTitle: string) {
-  //   return instance
-  //     .post("todo-lists", { title: listTitle })
-  //     .then((response) => response.data);
-  // },
   async createList(listTitle: string) {
     const response = await instance.post<CreateListResponse>("todo-lists", {
       title: listTitle,
     });
     return response.data;
   },
-  deleteList(listId: number) {
-    return instance
-      .delete<DeleteListResponse>(`todo-lists/${listId}`)
-      .then((response) => response.data);
+  async deleteList(listId: string) {
+    const response = await instance.delete<DeleteListResponse>(
+      `todo-lists/${listId}`
+    );
+    return response.data;
   },
   updateListTitle(listId: number, newTitle: string) {
     return instance
@@ -66,12 +57,12 @@ export const listsAPI = {
 
 // -----TASKS API-----
 
-type CreateTaskResponse = {
+export type CreateTaskResponse = {
   resultCode: number;
   messages: Array<string>;
   data: { item: DataItem };
 };
-type DataItem = {
+export type DataItem = {
   description: string;
   title: string;
   completed: boolean;
@@ -84,7 +75,7 @@ type DataItem = {
   order: number;
   addedDate: string;
 };
-type NewTaskStatus = {
+export type NewTaskStatus = {
   title: string;
   description: string;
   completed: boolean;
@@ -93,21 +84,24 @@ type NewTaskStatus = {
   startDate: string;
   deadline: string;
 };
-type UpdateTaskResponse = CreateTaskResponse;
-type DeleteTaskResponse = DeleteListResponse;
+export type UpdateTaskResponse = CreateTaskResponse;
+export type DeleteTaskResponse = DeleteListResponse;
 
 export const tasksAPI = {
-  getTasks(toDoListId: number) {
-    return instance
-      .get<GetTasksResponse>(`todo-lists/${toDoListId}/tasks`)
-      .then((response) => response.data);
+  async getTasks(listId: string) {
+    const response = await instance.get<GetTasksResponse>(
+      `todo-lists/${listId}/tasks`
+    );
+    return response.data;
   },
-  createTask(listId: number, taskTitle: string) {
-    return instance
-      .post<CreateTaskResponse>(`todo-lists/${listId}/tasks`, {
+  async createTask(listId: string, taskTitle: string) {
+    const response = await instance.post<CreateTaskResponse>(
+      `todo-lists/${listId}/tasks`,
+      {
         title: taskTitle,
-      })
-      .then((response) => response.data);
+      }
+    );
+    return response.data;
   },
   updateTask(listId: number, taskId: number, newTaskStatus: NewTaskStatus) {
     return instance.put<UpdateTaskResponse>(
@@ -117,9 +111,10 @@ export const tasksAPI = {
       }
     );
   },
-  deleteTask(listId: number, taskId: number) {
-    return instance
-      .delete<DeleteTaskResponse>(`todo-lists/${listId}/tasks/${taskId}`)
-      .then((response) => response.data);
+  async deleteTask(listId: string, taskId: string) {
+    const response = await instance.delete<DeleteTaskResponse>(
+      `todo-lists/${listId}/tasks/${taskId}`
+    );
+    return response.data;
   },
 };
