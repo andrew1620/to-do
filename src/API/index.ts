@@ -3,7 +3,7 @@ import axios from "axios";
 import { List, Task } from "../redux/toDoReducer";
 
 const instance = axios.create({
-  baseURL: "https://social-network.samuraijs.com/api/1.0/",
+  baseURL: "https://social-network.samuraijs.com/api/1.1",
   withCredentials: true,
   headers: {
     "API-KEY": "a12bc084-f676-4a1e-bd69-8d4f17b429fd",
@@ -43,11 +43,10 @@ export const listsAPI = {
     return response.data;
   },
   async deleteList(listId: string) {
-    const response = await instance.delete<DeleteListResponse>(
-      `todo-lists/${listId}`
-    );
+    const response = await instance.delete<DeleteListResponse>(`todo-lists/${listId}`);
     return response.data;
   },
+
   updateListTitle(listId: number, newTitle: string) {
     return instance
       .put(`todo-lists/${listId}`, { title: newTitle })
@@ -89,32 +88,44 @@ export type DeleteTaskResponse = DeleteListResponse;
 
 export const tasksAPI = {
   async getTasks(listId: string) {
-    const response = await instance.get<GetTasksResponse>(
-      `todo-lists/${listId}/tasks`
-    );
+    const response = await instance.get<GetTasksResponse>(`todo-lists/${listId}/tasks`);
     return response.data;
   },
   async createTask(listId: string, taskTitle: string) {
-    const response = await instance.post<CreateTaskResponse>(
-      `todo-lists/${listId}/tasks`,
-      {
-        title: taskTitle,
-      }
-    );
+    const response = await instance.post<CreateTaskResponse>(`todo-lists/${listId}/tasks`, {
+      title: taskTitle,
+    });
     return response.data;
   },
-  updateTask(listId: number, taskId: number, newTaskStatus: NewTaskStatus) {
-    return instance.put<UpdateTaskResponse>(
-      `todo-lists/${listId}/tasks/${taskId}`,
-      {
-        status: newTaskStatus,
-      }
-    );
+  // updateTask(listId: number, taskId: number, newTaskStatus: NewTaskStatus) {
+  //   return instance.put<UpdateTaskResponse>(`todo-lists/${listId}/tasks/${taskId}`, {
+  //     status: newTaskStatus,
+  //   });
+  // },
+  async updateTask(listId: string, taskId: string, newTaskStatus: NewTaskStatus) {
+    // console.log("from API --- ", listId, " ", taskId, " ", newTaskStatus);
+    try {
+      const response = await instance.put<UpdateTaskResponse>(
+        `todo-lists/${listId}/tasks/${taskId}`,
+        {
+          status: newTaskStatus,
+        }
+      );
+      console.log("from API --- ", response);
+
+      return response.data;
+    } catch (err) {
+      console.log("Ошибка в API updateTask: ", err);
+    }
   },
   async deleteTask(listId: string, taskId: string) {
-    const response = await instance.delete<DeleteTaskResponse>(
-      `todo-lists/${listId}/tasks/${taskId}`
-    );
-    return response.data;
+    try {
+      const response = await instance.delete<DeleteTaskResponse>(
+        `todo-lists/${listId}/tasks/${taskId}`
+      );
+      return response.data;
+    } catch (err) {
+      console.log("Ошибка в API deleteTask: ", err);
+    }
   },
 };

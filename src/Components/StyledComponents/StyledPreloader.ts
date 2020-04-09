@@ -7,15 +7,11 @@ type Props = {
 };
 
 const StyledPreloader = styled.div<Props>`
-  /* Преттиер переносит после стрелки и из-за этого оишбка */
-  background: url(${(props) =>
-      props.type === "corona" ? coronaPreloader : spinner})
-    center no-repeat;
-  background-size: 100px;
-  background-size: 30px;
-  background-color: #373770;
-  height: 100vh;
-  height: 30px;
+  background: url(${(props) => (props.type === "corona" ? coronaPreloader : spinner)}) center
+    no-repeat;
+  background-size: ${(props) => (props.type === "corona" ? "100px" : "30px")};
+  background-color: ${(props) => (props.type === "corona" ? "transparent" : "#373770")};
+  height: ${(props) => (props.type === "corona" ? "100vh" : "30px")};
 `;
 
 export default StyledPreloader;

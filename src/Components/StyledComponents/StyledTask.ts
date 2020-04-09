@@ -1,27 +1,44 @@
 import styled from "styled-components";
 
 import tick from "../../assets/img/success_tick.svg";
+import unTick from "../../assets/img/unsuccess_tick2.svg";
 
-const StyledTask = styled.div`
+type Props = {
+  completed: boolean;
+};
+
+const StyledTask = styled.div<Props>`
   display: flex;
   background-color: #373770;
-  height: 50px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
   cursor: pointer;
-  padding-left: 40px;
-  background-image: url(${tick});
+  background-image: url(${(props) => (props.completed ? tick : unTick)});
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: 5px center;
-  /* background-color: rgba(162, 70, 181, 0.5); */
+  font-size: 18px;
+  word-wrap: break-word;
+  padding: 5px 0 5px 40px;
 
-  :hover {
+  &:hover {
     background-color: rgba(55, 55, 112, 0.9);
   }
   :hover .btnDel {
     opacity: 1;
+  }
+
+  .title {
+    word-wrap: break-word;
+    max-width: 830px;
+    color: ${(props) => (props.completed ? "#8c8eb5" : "#DEDFEF")};
+    text-decoration: ${(props) => (props.completed ? "line-through" : "#none")};
+  }
+
+  .date {
+    font-size: 12px;
+    color: ${(props) => (props.completed ? "#426994" : "#63a6bd")};
   }
 
   .btnDel {

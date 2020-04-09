@@ -10,7 +10,12 @@ const App: React.FC<AppProps> = (props) => {
   return (
     <Wrapper>
       <Header />
-      <Main tasks={props.tasks} requireTasks={props.requireTasks} />
+      <Main
+        tasks={props.tasks}
+        requireTasks={props.requireTasks}
+        deleteTask={props.deleteTask}
+        updateTask={props.updateTask}
+      />
       <Footer />
     </Wrapper>
   );

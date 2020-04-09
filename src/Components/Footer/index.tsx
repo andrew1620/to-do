@@ -5,12 +5,12 @@ import StyledFooter from "../StyledComponents/StyledFooter";
 import { createTask } from "../../redux/toDoReducer";
 import NewTaskForm from "./NewTaskForm";
 
-const Footer: React.FC = () => {
+type Props = {};
+
+const Footer: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const handleFormSubmit = (formData: FormData) => {
-    dispatch(
-      createTask("f20a07c7-bce6-4d61-921d-12913784ed8b", formData.taskTitle)
-    );
+    dispatch(createTask("f20a07c7-bce6-4d61-921d-12913784ed8b", formData.taskTitle));
   };
 
   return (

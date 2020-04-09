@@ -7,6 +7,7 @@ import {
   GetTasksResponse,
   DeleteListResponse,
   DeleteTaskResponse,
+  UpdateTaskResponse,
 } from "../API";
 import {
   REQUIRE_LISTS,
@@ -25,6 +26,8 @@ import {
   DeleteListAction,
   DELETE_TASK,
   DeleteTaskAction,
+  UPDATE_TASK,
+  UpdateTaskAction,
 } from "./toDoReducer";
 
 export default function* rootSaga() {
@@ -35,6 +38,7 @@ export default function* rootSaga() {
     createTaskWatcher(),
     deleteListWatcher(),
     deleteTaskWatcher(),
+    updateTaskWatcher(),
   ]);
 }
 
@@ -58,10 +62,7 @@ export function* createListWatcher() {
 }
 export function* createListWorker(action: CreateListAction) {
   try {
-    const data: CreateListResponse = yield call(
-      listsAPI.createList,
-      action.payload.title
-    );
+    const data: CreateListResponse = yield call(listsAPI.createList, action.payload.title);
 
     if (data.resultCode === 0) {
       yield put(requireLists());
@@ -78,10 +79,7 @@ export function* deleteListWatcher() {
 }
 export function* deleteListWorker(action: DeleteListAction) {
   try {
-    const data: DeleteListResponse = yield call(
-      listsAPI.deleteList,
-      action.payload.listId
-    );
+    const data: DeleteListResponse = yield call(listsAPI.deleteList, action.payload.listId);
 
     if (data.resultCode === 0) {
       yield put(requireLists());
@@ -100,10 +98,7 @@ export function* requireTasksWatcher() {
 }
 export function* requireTasksWorker(action: RequireTasksAction) {
   try {
-    const data: GetTasksResponse = yield call(
-      tasksAPI.getTasks,
-      action.payload.listId
-    );
+    const data: GetTasksResponse = yield call(tasksAPI.getTasks, action.payload.listId);
     console.log("tasks--- ", data);
 
     yield put(setTasks(data.items, data.totalCount));
@@ -140,19 +135,31 @@ export function* deleteTaskWatcher() {
 export function* deleteTaskWorker(action: DeleteTaskAction) {
   const { listId, taskId } = action.payload;
   try {
-    const data: DeleteTaskResponse = yield call(
-      tasksAPI.deleteTask,
-      listId,
-      taskId
-    );
+    const data: DeleteTaskResponse = yield call(tasksAPI.deleteTask, listId, taskId);
     if (data.resultCode === 0) {
       yield put(requireTasks(listId));
     } else {
-      console.log(
-        `Возникла ошибка во время удаления Таски: ${data.messages[0]}`
-      );
+      console.log(`Возникла ошибка на сервере во время удаления Таски: ${data.messages[0]}`);
     }
   } catch (err) {
     console.log(`Возникла ошибка во время удаления Таски: ${err}`);
+  }
+}
+
+export function* updateTaskWatcher() {
+  yield takeEvery(UPDATE_TASK, updateTaskWorker);
+}
+export function* updateTaskWorker(action: UpdateTaskAction) {
+  const { listId, taskId, newTaskStatus } = action.payload;
+  try {
+    const data: UpdateTaskResponse = yield call(tasksAPI.updateTask, listId, taskId, newTaskStatus);
+
+    if (data.resultCode === 0) {
+      yield put(requireTasks(listId));
+    } else {
+      console.log(`Возникла ошибка на сервере во время изменения Таски: ${data.messages[0]}`);
+    }
+  } catch (err) {
+    console.log("Произошла ошибка при изменении Таски: ", err);
   }
 }

@@ -4,14 +4,17 @@ import { connect, useDispatch } from "react-redux";
 import App from ".";
 import { RootState } from "../../redux/store";
 import { getTasks, getTasksTotalCount } from "../../redux/toDoSelectors";
-import { Task, requireTasks, deleteList } from "../../redux/toDoReducer";
+import { Task, requireTasks, deleteList, deleteTask, updateTask } from "../../redux/toDoReducer";
 import StyledPreloader from "../StyledComponents/StyledPreloader";
+import { NewTaskStatus } from "../../API";
 
 export type Props = {
   tasks: Array<Task> | null;
   tasksTotalCount: number | null;
   requireTasks: (listId: string) => void;
   deleteList: (listId: string) => void;
+  deleteTask: (listId: string, taskId: string) => void;
+  updateTask: (listId: string, taskId: string, newTaskStatus: NewTaskStatus) => void;
 };
 
 const AppContainer: React.FC<Props> = (props) => {
@@ -33,7 +36,9 @@ const mstp = (state: RootState) => {
 };
 const mdtp = {
   requireTasks,
+  deleteTask,
   deleteList,
+  updateTask,
 };
 
 export default connect(mstp, mdtp)(AppContainer);
