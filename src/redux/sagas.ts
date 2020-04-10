@@ -99,7 +99,7 @@ export function* requireTasksWatcher() {
 export function* requireTasksWorker(action: RequireTasksAction) {
   try {
     const data: GetTasksResponse = yield call(tasksAPI.getTasks, action.payload.listId);
-    console.log("tasks--- ", data);
+    console.log("tasks--- ", data.items);
 
     yield put(setTasks(data.items, data.totalCount));
   } catch (err) {
@@ -150,6 +150,8 @@ export function* updateTaskWatcher() {
   yield takeEvery(UPDATE_TASK, updateTaskWorker);
 }
 export function* updateTaskWorker(action: UpdateTaskAction) {
+  console.log("Сработал апдейт");
+
   const { listId, taskId, newTaskStatus } = action.payload;
   try {
     const data: UpdateTaskResponse = yield call(tasksAPI.updateTask, listId, taskId, newTaskStatus);

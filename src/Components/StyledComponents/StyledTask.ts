@@ -4,7 +4,7 @@ import tick from "../../assets/img/success_tick.svg";
 import unTick from "../../assets/img/unsuccess_tick2.svg";
 
 type Props = {
-  completed: boolean;
+  completed: number;
 };
 
 const StyledTask = styled.div<Props>`
@@ -14,24 +14,33 @@ const StyledTask = styled.div<Props>`
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
   cursor: pointer;
-  background-image: url(${(props) => (props.completed ? tick : unTick)});
-  background-size: 20px;
-  background-repeat: no-repeat;
-  background-position: 5px center;
   font-size: 18px;
   word-wrap: break-word;
-  padding: 5px 0 5px 40px;
+  padding: 0;
 
   &:hover {
     background-color: rgba(55, 55, 112, 0.9);
   }
-  :hover .btnDel {
-    opacity: 1;
+  &:hover .deleteTask {
+    opacity: 0.7;
+  }
+
+  .tick {
+    width: 40px;
+    background-image: url(${(props) => (props.completed ? tick : unTick)});
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .body {
+    padding: 5px 0;
+    width: 100%;
+    max-width: 816px;
   }
 
   .title {
     word-wrap: break-word;
-    max-width: 830px;
     color: ${(props) => (props.completed ? "#8c8eb5" : "#DEDFEF")};
     text-decoration: ${(props) => (props.completed ? "line-through" : "#none")};
   }
@@ -39,18 +48,6 @@ const StyledTask = styled.div<Props>`
   .date {
     font-size: 12px;
     color: ${(props) => (props.completed ? "#426994" : "#63a6bd")};
-  }
-
-  .btnDel {
-    margin-left: auto;
-    /* border: 1px solid red; */
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    padding: 5px;
-    display: flex;
-  }
-  .btnDelPic {
-    margin: auto;
   }
 `;
 

@@ -3,6 +3,8 @@ import React from "react";
 import StyledTask from "../../StyledComponents/StyledTask";
 import { Task as TaskType } from "../../../redux/toDoReducer";
 import { NewTaskStatus } from "../../../API";
+import StyledButton from "../../StyledComponents/StyledButton";
+import deleteTaskPicture from "../../../assets/img/deleteTask.svg";
 
 type Props = {
   task: TaskType;
@@ -14,35 +16,34 @@ const Task: React.FC<Props> = ({ task, deleteTask, updateTask }) => {
   const completeTask = () => {
     const { title, description, status, priority, startDate, deadline } = task;
     const completedTask = {
-      title: "brrrreeeeddd",
+      title,
       description,
-      status,
+      status: status === 0 ? 1 : 0,
       priority,
       startDate,
-      deadline,
       completed: true,
+      deadline,
     };
 
-    updateTask("f20a07c7-bce6-4d61-921d-12913784ed8b", task.id, completedTask);
+    updateTask(task.todoListId, task.id, completedTask);
   };
 
   const deleteItem = () => {
-    deleteTask("f20a07c7-bce6-4d61-921d-12913784ed8b", task.id);
+    deleteTask(task.todoListId, task.id);
   };
 
   return (
-    <StyledTask completed={task.completed} onClick={completeTask}>
-      <div>
+    <StyledTask completed={task.status}>
+      <div className="tick" onClick={completeTask}></div>
+      <div className="body">
         <div className="title">{task.title}</div>
         <div className="date">{new Date(task.addedDate).toLocaleString()}</div>
       </div>
-      <div className="btnDel">
-        <span className="btnDelPic" onClick={deleteItem}>
-          X
-        </span>
-      </div>
+      <StyledButton className="deleteTask" picture={deleteTaskPicture} onClick={deleteItem} />
     </StyledTask>
   );
 };
 
 export default Task;
+
+// Instead of property the task.completed I use task.status in order the task to be completed. I can't use task.completed because it's not being changed after I send "task.completed: true". Now I don't know why)

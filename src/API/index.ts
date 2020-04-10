@@ -97,21 +97,13 @@ export const tasksAPI = {
     });
     return response.data;
   },
-  // updateTask(listId: number, taskId: number, newTaskStatus: NewTaskStatus) {
-  //   return instance.put<UpdateTaskResponse>(`todo-lists/${listId}/tasks/${taskId}`, {
-  //     status: newTaskStatus,
-  //   });
-  // },
   async updateTask(listId: string, taskId: string, newTaskStatus: NewTaskStatus) {
-    // console.log("from API --- ", listId, " ", taskId, " ", newTaskStatus);
+    console.log("from API --- ", listId, " ", taskId, " ", newTaskStatus);
     try {
       const response = await instance.put<UpdateTaskResponse>(
         `todo-lists/${listId}/tasks/${taskId}`,
-        {
-          status: newTaskStatus,
-        }
+        newTaskStatus
       );
-      console.log("from API --- ", response);
 
       return response.data;
     } catch (err) {

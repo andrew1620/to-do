@@ -54,6 +54,7 @@ const toDoReducer = (state = initialState, action: Action) => {
       return {
         ...state,
         tasks: [...action.payload.items],
+        // tasks: [...(state.tasks || []), ...action.payload.items],
         tasksTotalCount: action.payload.totalCount,
       };
     default:
