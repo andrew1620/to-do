@@ -39,7 +39,13 @@ const Task: React.FC<Props> = ({ task, deleteTask, updateTask }) => {
         <div className="title">{task.title}</div>
         <div className="date">{new Date(task.addedDate).toLocaleString()}</div>
       </div>
-      <StyledButton className="deleteTask" picture={deleteTaskPicture} onClick={deleteItem} />
+      <StyledButton
+        className="deleteTask"
+        picture={deleteTaskPicture}
+        width={"5%"}
+        onClick={deleteItem}
+        style={{ marginLeft: "auto" }}
+      />
     </StyledTask>
   );
 };

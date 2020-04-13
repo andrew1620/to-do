@@ -5,13 +5,25 @@ interface Props {
 }
 
 const Wrapper = styled.div<Props>`
+  /* border: 1px solid red; */
   width: 70%;
   margin: 0 auto;
-  /* background: rgba(255, 255, 255, 0.2); */
   color: #eee;
   box-shadow: 0px 5px 20px black;
-  /* max-height: 100vh; */
-  /* border: 1px solid red; */
+  max-height: 100vh;
+  overflow: hidden;
+
+  /* .container {
+    border: 1px solid red;
+    max-height: 92vh;
+    overflow: hidden;
+  } */
+
+  @media (max-width: 420px) {
+    & {
+      width: 100%;
+    }
+  }
 `;
 
 export default Wrapper;

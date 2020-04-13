@@ -20,13 +20,16 @@ const StyledTask = styled.div<Props>`
 
   &:hover {
     background-color: rgba(55, 55, 112, 0.9);
+    background-color: #403c76;
   }
   &:hover .deleteTask {
     opacity: 0.7;
   }
 
   .tick {
-    width: 40px;
+    /* width: 40px; */
+    width: 5%;
+    min-width: 5%;
     background-image: url(${(props) => (props.completed ? tick : unTick)});
     background-size: 20px;
     background-repeat: no-repeat;
@@ -35,8 +38,9 @@ const StyledTask = styled.div<Props>`
 
   .body {
     padding: 5px 0;
-    width: 100%;
-    max-width: 816px;
+    /* border: 1px solid red; */
+    /* width: 100%; */
+    max-width: 90%;
   }
 
   .title {
@@ -48,6 +52,39 @@ const StyledTask = styled.div<Props>`
   .date {
     font-size: 12px;
     color: ${(props) => (props.completed ? "#426994" : "#63a6bd")};
+  }
+
+  @media (max-width: 900px) {
+    .tick {
+      min-width: 7%;
+    }
+    .body {
+      max-width: 85%;
+    }
+  }
+  @media (max-width: 650px) {
+    .tick {
+      min-width: 10%;
+    }
+    .body {
+      max-width: 82%;
+    }
+  }
+  @media (max-width: 450px) {
+    .tick {
+      min-width: 11%;
+    }
+    .body {
+      max-width: 79%;
+    }
+  }
+  @media (max-width: 400px) {
+    .tick {
+      min-width: 13%;
+    }
+    .body {
+      max-width: 75%;
+    }
   }
 `;
 
