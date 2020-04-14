@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const StyledAddTaskTextarea = styled.textarea`
+type Props = {
+  textareaHeight?: string;
+};
+
+const StyledAddTaskTextarea = styled.textarea<Props>`
   /* border: 3px solid black; */
   border: none;
   outline: none;
@@ -12,6 +16,7 @@ const StyledAddTaskTextarea = styled.textarea`
   width: 100%;
   font-size: 16px;
   max-height: inherit;
+  height: ${(props) => props.textareaHeight || "auto"};
 
   &::-webkit-scrollbar-track {
     background-color: transparent;

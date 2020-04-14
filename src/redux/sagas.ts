@@ -1,4 +1,6 @@
 import { takeEvery, put, call, all } from "redux-saga/effects";
+import { reset } from "redux-form";
+
 import {
   listsAPI,
   CreateListResponse,
@@ -111,6 +113,7 @@ export function* createTaskWatcher() {
   yield takeEvery(CREATE_TASK, createTaskWorker);
 }
 export function* createTaskWorker(action: CreateTaskAction) {
+  yield put(reset("newTask"));
   try {
     const data: CreateTaskResponse = yield call(
       tasksAPI.createTask,

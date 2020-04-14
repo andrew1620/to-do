@@ -5,11 +5,7 @@ import StyledFooter from "../StyledComponents/StyledFooter";
 import { createTask } from "../../redux/toDoReducer";
 import NewTaskForm from "./NewTaskForm";
 
-type Props = {
-  setTextareaHeight: (newHeight: string) => void;
-};
-
-const Footer: React.FC<Props> = ({ setTextareaHeight }) => {
+const Footer: React.FC = () => {
   const dispatch = useDispatch();
   const handleFormSubmit = (formData: FormData) => {
     dispatch(createTask("f20a07c7-bce6-4d61-921d-12913784ed8b", formData.taskTitle));
@@ -17,7 +13,7 @@ const Footer: React.FC<Props> = ({ setTextareaHeight }) => {
 
   return (
     <StyledFooter>
-      <NewTaskForm onSubmit={handleFormSubmit} setTextareaHeight={setTextareaHeight} />
+      <NewTaskForm onSubmit={handleFormSubmit} />
     </StyledFooter>
   );
 };

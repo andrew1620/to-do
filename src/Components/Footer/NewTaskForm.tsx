@@ -8,10 +8,9 @@ import StyledButton from "../StyledComponents/StyledButton";
 
 type Props = {
   onSubmit: (formData: FormData) => void;
-  setTextareaHeight: (newHeight: string) => void;
 };
 
-const NewTaskForm: React.FC<InjectedFormProps<FormData, Props> & Props> = (props) => {
+const NewTaskForm: React.FC<InjectedFormProps<FormData, Props>> = (props) => {
   return (
     <form onSubmit={props.handleSubmit}>
       <Field
@@ -19,7 +18,6 @@ const NewTaskForm: React.FC<InjectedFormProps<FormData, Props> & Props> = (props
         name="taskTitle"
         type="text"
         placeholder="Что надо сделать"
-        setTextareaHeight={props.setTextareaHeight}
       />
       <StyledButton picture={addTaskPicture} opacity={0.7} width="60px" />
     </form>

@@ -5,7 +5,7 @@ interface Props {
 }
 
 const Wrapper = styled.div<Props>`
-  /* border: 1px solid red; */
+  /* border: 1px solid yellow; */
   width: 70%;
   margin: 0 auto;
   color: #eee;
@@ -13,11 +13,12 @@ const Wrapper = styled.div<Props>`
   max-height: 100vh;
   overflow: hidden;
 
-  /* .container {
-    border: 1px solid red;
+  .container {
+    /* border: 1px solid white; */
     max-height: 92vh;
-    overflow: hidden;
-  } */
+    display: flex;
+    flex-direction: column;
+  }
 
   @media (max-width: 420px) {
     & {

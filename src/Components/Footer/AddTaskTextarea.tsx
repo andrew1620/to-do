@@ -1,22 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+
 import StyledAddTaskTextarea from "../StyledComponents/StyledAddTaskTextarea";
 
 const TextArea = (props: any) => {
   const textareaRef = React.createRef<HTMLTextAreaElement>();
-  const { setTextareaHeight } = props;
+  const [textareaScrollHeight, setTextareaScrollHeight] = useState("auto");
 
   useEffect(() => {
-    console.log(`высота поменялась ${textareaRef.current?.style.height}`);
-    setTextareaHeight(textareaRef.current?.style.height);
-  }, [setTextareaHeight, textareaRef]);
-
-  const changeTextareaHeight = () => {
-    if (textareaRef && textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + 2 + "px";
-    } else {
-      alert("fa");
+    const scrollHeight = textareaRef.current?.scrollHeight;
+    if (scrollHeight !== parseInt(textareaScrollHeight)) {
+      setTextareaScrollHeight(`${scrollHeight}px` || "auto");
     }
+  });
+  const returnHeight = () => {
+    setTextareaScrollHeight("50px");
   };
 
   return (
@@ -26,7 +23,8 @@ const TextArea = (props: any) => {
       type={props.type}
       placeholder={props.placeholder}
       ref={textareaRef}
-      onInput={changeTextareaHeight}
+      textareaHeight={textareaScrollHeight}
+      onBlur={returnHeight}
     />
   );
 };

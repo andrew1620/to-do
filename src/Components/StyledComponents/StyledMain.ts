@@ -4,11 +4,12 @@ type Props = {
   textareaHeight?: string;
 };
 
+// calc(92vh - 50px); 50px - initial textarea height.
 const StyledMain = styled.div<Props>`
+  /* border: 1px solid red; */
   overflow: auto;
   overflow-x: hidden;
-  /* I have to define max height of styledMain after I finish header */
-  max-height: calc(87vh - (${(props) => props.textareaHeight || "0vh"}));
+  max-height: calc(92vh - 50px);
   background: #373770;
 
   & > div:not(:last-child) {
