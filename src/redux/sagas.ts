@@ -99,9 +99,10 @@ export function* requireTasksWatcher() {
   yield takeEvery(REQUIRE_TASKS, requireTasksWorker);
 }
 export function* requireTasksWorker(action: RequireTasksAction) {
+  const { listId, count, page } = action.payload;
   try {
-    const data: GetTasksResponse = yield call(tasksAPI.getTasks, action.payload.listId);
-    console.log("tasks--- ", data.items);
+    const data: GetTasksResponse = yield call(tasksAPI.getTasks, listId, count, page);
+    console.log("tasks--- ", data);
 
     yield put(setTasks(data.items, data.totalCount));
   } catch (err) {
@@ -123,7 +124,7 @@ export function* createTaskWorker(action: CreateTaskAction) {
     console.log("createTask--- ", data);
 
     if (data.resultCode === 0) {
-      yield put(requireTasks(action.payload.listId));
+      yield put(requireTasks(action.payload.listId, "15", "1"));
     } else {
       yield console.log("Ошибка при создании Таски: ", data.messages[0]);
     }
@@ -140,7 +141,7 @@ export function* deleteTaskWorker(action: DeleteTaskAction) {
   try {
     const data: DeleteTaskResponse = yield call(tasksAPI.deleteTask, listId, taskId);
     if (data.resultCode === 0) {
-      yield put(requireTasks(listId));
+      yield put(requireTasks(listId, "15", "1"));
     } else {
       console.log(`Возникла ошибка на сервере во время удаления Таски: ${data.messages[0]}`);
     }
@@ -160,7 +161,7 @@ export function* updateTaskWorker(action: UpdateTaskAction) {
     const data: UpdateTaskResponse = yield call(tasksAPI.updateTask, listId, taskId, newTaskStatus);
 
     if (data.resultCode === 0) {
-      yield put(requireTasks(listId));
+      yield put(requireTasks(listId, "15", "1"));
     } else {
       console.log(`Возникла ошибка на сервере во время изменения Таски: ${data.messages[0]}`);
     }

@@ -87,8 +87,10 @@ export type UpdateTaskResponse = CreateTaskResponse;
 export type DeleteTaskResponse = DeleteListResponse;
 
 export const tasksAPI = {
-  async getTasks(listId: string) {
-    const response = await instance.get<GetTasksResponse>(`todo-lists/${listId}/tasks`);
+  async getTasks(listId: string, count: string, page: string) {
+    const response = await instance.get<GetTasksResponse>(
+      `todo-lists/${listId}/tasks?count=${count}&page=${page}`
+    );
     return response.data;
   },
   async createTask(listId: string, taskTitle: string) {

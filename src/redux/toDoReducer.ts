@@ -32,7 +32,7 @@ export type Task = {
 };
 
 const initialState = {
-  lists: [{ id: "1", addedDate: "22", order: 1, title: "first" }] as Array<List> | null,
+  lists: null as Array<List> | null,
   tasks: null as Array<Task> | null,
   tasksTotalCount: null as number | null,
 };
@@ -49,7 +49,7 @@ type Action =
 const toDoReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case SET_LISTS:
-      return { ...state, lists: [...state.lists, ...action.payload] };
+      return { ...state, lists: [...action.payload] };
     case SET_TASKS:
       return {
         ...state,
@@ -101,11 +101,11 @@ export const deleteList = (listId: string): DeleteListAction => {
 
 export type RequireTasksAction = {
   type: typeof REQUIRE_TASKS;
-  payload: { listId: string };
+  payload: { listId: string; count: string; page: string };
 };
-export const requireTasks = (listId: string): RequireTasksAction => ({
+export const requireTasks = (listId: string, count: string, page: string): RequireTasksAction => ({
   type: REQUIRE_TASKS,
-  payload: { listId: listId },
+  payload: { listId, count, page },
 });
 
 export type SetTasksAction = {

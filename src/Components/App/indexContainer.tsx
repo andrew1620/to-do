@@ -11,7 +11,7 @@ import { NewTaskStatus } from "../../API";
 export type Props = {
   tasks: Array<Task> | null;
   tasksTotalCount: number | null;
-  requireTasks: (listId: string) => void;
+  requireTasks: (listId: string, count: string, page: string) => void;
   deleteList: (listId: string) => void;
   deleteTask: (listId: string, taskId: string) => void;
   updateTask: (listId: string, taskId: string, newTaskStatus: NewTaskStatus) => void;
