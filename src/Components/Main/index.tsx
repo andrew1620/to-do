@@ -15,47 +15,43 @@ type Props = {
 
 const Main: React.FC<Props> = ({ tasks, requireTasks, deleteTask, updateTask }) => {
   const mainRef = useRef<HTMLDivElement>(null);
-  const { current } = mainRef;
-
   // Кол-во элементов, которые я загружаю с сервера
   const [count, setCount] = useState(15);
 
   // Ф-ия, которая увеличивает кол-во загружаемых с сервера элементов
   const scrollMain = useCallback(() => {
     const { current } = mainRef;
+    console.log("scroll works");
 
     if (current) {
       const isMainEnd = current.scrollHeight - current.scrollTop - 50 <= current.clientHeight;
-      console.log("scroll works", isMainEnd);
       if (isMainEnd) setCount(count + 1);
     }
   }, []);
-  // Вешаем обработчик на элемент
-  useEffect(() => {
-    console.log("current changed");
 
+  // Вешаем обработчик на элемент, в массив передаю саму функцию, которая не изменится и current,
+  // который должен поменяться, когда я получу current
+  useEffect(() => {
+    const { current } = mainRef;
     if (current) {
       current.addEventListener("scroll", scrollMain);
     }
     return () => {
-      console.log("deleliting event during unmounting");
+      alert("removing");
       current?.removeEventListener("scroll", scrollMain);
     };
-  }, [scrollMain, current]);
+  }, [scrollMain]);
 
   // При изменении кол-ва загружаемых элементов с сервера запускается их загрузка
-  // И если кол-во загружаемых элементов больше 16, удаляем обработчик
+  // И если кол-во загружаемых элементов равно 16, удаляем обработчик
   useEffect(() => {
-    console.log("require works ", count);
-    const { current } = mainRef;
     if (count === 16) {
-      if (current) {
-        console.log("deleting after scroll");
-        current.removeEventListener("scroll", scrollMain);
+      if (mainRef.current) {
+        mainRef.current.removeEventListener("scroll", scrollMain);
       }
     }
     requireTasks("f20a07c7-bce6-4d61-921d-12913784ed8b", `${count}`, "1");
-  }, [count, requireTasks, scrollMain]);
+  }, [count, scrollMain]);
 
   if (!tasks) return <StyledPreloader type="spinner" />;
 
@@ -63,11 +59,7 @@ const Main: React.FC<Props> = ({ tasks, requireTasks, deleteTask, updateTask }) 
     <Task key={task.id} task={task} deleteTask={deleteTask} updateTask={updateTask} />
   ));
 
-  return (
-    <StyledMain id="main" ref={mainRef}>
-      {tasksList}
-    </StyledMain>
-  );
+  return <StyledMain ref={mainRef}>{tasksList}</StyledMain>;
 };
 
 export default Main;
