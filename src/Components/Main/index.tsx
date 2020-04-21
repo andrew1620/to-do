@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import throttle from "lodash.throttle";
 
 import Task from "./Task/Task";
@@ -10,9 +10,11 @@ import { NewTaskStatus } from "../../API";
 type Props = {
   tasks: Array<TaskType> | null;
   tasksTotalCount: number | null;
+  tasksAmountToRequire: number;
   requireTasks: (listId: string, count: string, page: string) => void;
   deleteTask: (listId: string, taskId: string) => void;
   updateTask: (listId: string, taskId: string, newTaskStatus: NewTaskStatus) => void;
+  setTasksAmountToRequire: () => void;
 };
 
 const Main: React.FC<Props> = ({
@@ -21,10 +23,10 @@ const Main: React.FC<Props> = ({
   deleteTask,
   updateTask,
   tasksTotalCount,
+  tasksAmountToRequire: count, // initial tasks amount to download from the server
+  setTasksAmountToRequire: setCount,
 }) => {
   const mainRef = useRef<HTMLDivElement>(null);
-
-  const [count, setCount] = useState(15); // initial tasks amount to download from the server
 
   const downloadIndent = 60; // Min scrollBottom height when you need to download data.
 
@@ -33,7 +35,7 @@ const Main: React.FC<Props> = ({
       if (e.target) {
         const isMainEnd =
           e.target.scrollHeight - e.target.scrollTop - e.target.offsetHeight <= downloadIndent;
-        if (isMainEnd) setCount((prevCount) => prevCount + 1);
+        if (isMainEnd) setCount();
       }
     }, 100),
     []
@@ -43,7 +45,6 @@ const Main: React.FC<Props> = ({
     const { current } = mainRef;
     current?.addEventListener("scroll", scrollMain);
     return () => {
-      console.log("removing after unmouunting -> ", current);
       current?.removeEventListener("scroll", scrollMain);
     };
   }, [scrollMain]);

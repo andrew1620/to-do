@@ -1,4 +1,4 @@
-import { takeEvery, put, call, all } from "redux-saga/effects";
+import { takeEvery, put, call, all, select } from "redux-saga/effects";
 import { reset } from "redux-form";
 
 import {
@@ -10,6 +10,9 @@ import {
   DeleteListResponse,
   DeleteTaskResponse,
   UpdateTaskResponse,
+  authorizeAPI,
+  MeResponse,
+  LoginResponse,
 } from "../API";
 import {
   REQUIRE_LISTS,
@@ -30,7 +33,14 @@ import {
   DeleteTaskAction,
   UPDATE_TASK,
   UpdateTaskAction,
+  CHECK_AUTHORIZATION,
+  setAuthorizeData,
+  LOGIN,
+  LoginAction,
+  checkAuthorization,
+  login,
 } from "./toDoReducer";
+import { getTasksAmountToRequire, getTasksTotalCount } from "./toDoSelectors";
 
 export default function* rootSaga() {
   yield all([
@@ -41,10 +51,53 @@ export default function* rootSaga() {
     deleteListWatcher(),
     deleteTaskWatcher(),
     updateTaskWatcher(),
+    checkAuthorizationWatcher(),
+    loginWatcher(),
   ]);
 }
 
-// ---LIST---
+// ----AUTHORIZE----
+
+const loginData = {
+  email: "forNetworkServer@yandex.ru",
+  password: "6832115",
+  rememberMe: true,
+};
+
+export function* checkAuthorizationWatcher() {
+  yield takeEvery(CHECK_AUTHORIZATION, checkAuthorizationWorker);
+}
+export function* checkAuthorizationWorker() {
+  try {
+    const data: MeResponse = yield call(authorizeAPI.me);
+    if (data.resultCode === 0) {
+      const { id, email, login } = data.data;
+      yield put(setAuthorizeData(id, email, login));
+    } else if (data.resultCode !== 0 && data.messages[0] === "You are not authorized") {
+      yield put(login(loginData));
+    } else {
+      console.log(`Возникла ошибка на сервере во время авторизации: ${data.messages[0]}`);
+    }
+  } catch (err) {
+    console.log(`Произошла ошибка во время авторизации: ${err}`);
+  }
+}
+
+export function* loginWatcher() {
+  yield takeEvery(LOGIN, loginWorker);
+}
+export function* loginWorker(action: LoginAction) {
+  const { email, password, rememberMe } = action.payload;
+  try {
+    const data: LoginResponse = yield call(authorizeAPI.login, email, password, rememberMe);
+    if (data.resultCode === 0) yield put(checkAuthorization());
+    else console.log(`Возникла ошибка на сервере во время логинизации: ${data.messages[0]}`);
+  } catch (err) {
+    console.log(`Произошла ошибка по время логинизации: ${err}`);
+  }
+}
+
+// ---LISTS---
 export function* requireListsWatcher() {
   yield takeEvery(REQUIRE_LISTS, requireListsWorker);
 }
@@ -124,7 +177,8 @@ export function* createTaskWorker(action: CreateTaskAction) {
     console.log("createTask--- ", data);
 
     if (data.resultCode === 0) {
-      yield put(requireTasks(action.payload.listId, "15", "1"));
+      const tasksAmountToRequire = yield select(getTasksAmountToRequire);
+      yield put(requireTasks(action.payload.listId, `${tasksAmountToRequire}`, "1"));
     } else {
       yield console.log("Ошибка при создании Таски: ", data.messages[0]);
     }
@@ -141,7 +195,11 @@ export function* deleteTaskWorker(action: DeleteTaskAction) {
   try {
     const data: DeleteTaskResponse = yield call(tasksAPI.deleteTask, listId, taskId);
     if (data.resultCode === 0) {
-      yield put(requireTasks(listId, "15", "1"));
+      const tasksTotalCount = yield select(getTasksTotalCount);
+      const tasksAmountToRequire = yield select(getTasksAmountToRequire);
+      alert(tasksTotalCount === tasksAmountToRequire);
+      // Допилить проверку на кол-во загружаемых тасок если скролл удален.
+      yield put(requireTasks(listId, `${tasksAmountToRequire}`, "1"));
     } else {
       console.log(`Возникла ошибка на сервере во время удаления Таски: ${data.messages[0]}`);
     }

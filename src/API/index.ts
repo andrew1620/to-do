@@ -10,6 +10,50 @@ const instance = axios.create({
   },
 });
 
+export type MeResponse = {
+  data: {
+    id: number;
+    email: string;
+    login: string;
+  };
+  resultCode: number;
+  messages: Array<string>;
+};
+
+export type LoginResponse = {
+  data: {
+    userId: number;
+  };
+  resultCode: number;
+  messages: Array<string>;
+};
+
+export const authorizeAPI = {
+  async me() {
+    try {
+      const response = await instance.get<MeResponse>(
+        `https://social-network.samuraijs.com/api/1.1/auth/me`
+      );
+      return response.data;
+    } catch (err) {
+      console.log(`Перехвачена ошибка в API при проверке авторизации: ${err}`);
+    }
+  },
+  async login(email: string, password: string, rememberMe: boolean) {
+    try {
+      const response = await instance.post<LoginResponse>(
+        `https://social-network.samuraijs.com/api/1.1/auth/login`,
+        { email, password, rememberMe }
+      );
+      return response.data;
+    } catch (err) {
+      console.log(`Перехвачена ошибка в API при логинизации: ${err}`);
+    }
+  },
+};
+
+// ----LISTS API----
+
 export type GetListsResponse = Array<List>;
 export type GetTasksResponse = {
   items: Array<Task>;

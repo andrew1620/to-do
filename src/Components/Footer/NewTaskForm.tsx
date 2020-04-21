@@ -17,7 +17,7 @@ const NewTaskForm: React.FC<InjectedFormProps<FormData, Props>> = (props) => {
         component={AddTaskTextArea}
         name="taskTitle"
         type="text"
-        placeholder="Что надо сделать"
+        placeholder="Что надо сделать?"
       />
       <StyledButton picture={addTaskPicture} opacity={0.7} width="60px" />
     </form>

@@ -17,6 +17,8 @@ const App: React.FC<AppProps> = (props) => {
           deleteTask={props.deleteTask}
           updateTask={props.updateTask}
           tasksTotalCount={props.tasksTotalCount}
+          tasksAmountToRequire={props.tasksAmountToRequire}
+          setTasksAmountToRequire={props.setTasksAmountToRequire}
         />
         <Footer />
       </div>

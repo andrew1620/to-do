@@ -1,5 +1,9 @@
 import { NewTaskStatus } from "../API";
 
+export const CHECK_AUTHORIZATION = "todo/CHECK_AUTHORIZATION";
+export const SET_AUTHORIZE_DATA = "todo/SET_AUTHORIZE_DATA";
+export const LOGIN = "todo/LOGIN";
+
 export const REQUIRE_LISTS = "todo/REQUIRE_LISTS";
 export const SET_LISTS = "todo/SET_LISTS";
 export const CREATE_LIST = "todo/CREATE_LIST";
@@ -10,6 +14,7 @@ export const SET_TASKS = "todo/SET_TASKS";
 export const CREATE_TASK = "todo/CREATE_TASK";
 export const UPDATE_TASK = "todo/UPDATE_TASK";
 export const DELETE_TASK = "todo/DELETE_TASK";
+export const SET_TASKS_AMOUNT_TO_REQUIRE = "todo/SET_TASKS_AMOUNT_TO_REQUIRE";
 
 export type List = {
   id: string;
@@ -32,9 +37,15 @@ export type Task = {
 };
 
 const initialState = {
+  authorizeData: {
+    id: null as number | null,
+    email: null as string | null,
+    login: null as string | null,
+  },
   lists: null as Array<List> | null,
   tasks: null as Array<Task> | null,
   tasksTotalCount: null as number | null,
+  tasksAmountToRequire: 15,
 };
 
 export type InitialState = typeof initialState;
@@ -44,10 +55,15 @@ type Action =
   | DeleteListAction
   | RequireTasksAction
   | SetTasksAction
-  | DeleteTaskAction;
+  | DeleteTaskAction
+  | CheckAuthorizationAction
+  | SetAuthorizeDataAction
+  | SetTasksAmountToRequireAction;
 
 const toDoReducer = (state = initialState, action: Action) => {
   switch (action.type) {
+    case SET_AUTHORIZE_DATA:
+      return { ...state, authorizeData: { ...action.payload } };
     case SET_LISTS:
       return { ...state, lists: [...action.payload] };
     case SET_TASKS:
@@ -57,6 +73,11 @@ const toDoReducer = (state = initialState, action: Action) => {
         // tasks: [...(state.tasks || []), ...action.payload.items],
         tasksTotalCount: action.payload.totalCount,
       };
+    case SET_TASKS_AMOUNT_TO_REQUIRE:
+      return {
+        ...state,
+        tasksAmountToRequire: state.tasksAmountToRequire + 1,
+      };
     default:
       return state;
   }
@@ -65,6 +86,53 @@ const toDoReducer = (state = initialState, action: Action) => {
 export default toDoReducer;
 
 // -----action creators-----
+
+export type CheckAuthorizationAction = {
+  type: typeof CHECK_AUTHORIZATION;
+};
+export const checkAuthorization = (): CheckAuthorizationAction => ({ type: CHECK_AUTHORIZATION });
+
+export type AuthorizeData = {
+  id: number;
+  email: string;
+  login: string;
+};
+export type SetAuthorizeDataAction = {
+  type: typeof SET_AUTHORIZE_DATA;
+  payload: AuthorizeData;
+};
+export const setAuthorizeData = (
+  id: number,
+  email: string,
+  login: string
+): SetAuthorizeDataAction => ({
+  type: SET_AUTHORIZE_DATA,
+  payload: {
+    id,
+    email,
+    login,
+  },
+});
+
+export type LoginData = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
+export type LoginAction = {
+  type: typeof LOGIN;
+  payload: LoginData;
+};
+export const login = (loginData: LoginData): LoginAction => ({
+  type: LOGIN,
+  payload: {
+    email: loginData.email,
+    password: loginData.password,
+    rememberMe: loginData.rememberMe,
+  },
+});
+
+// ----LISTS----
 
 type RequireListsAction = {
   type: typeof REQUIRE_LISTS;
@@ -152,3 +220,10 @@ export const updateTask = (
   type: UPDATE_TASK,
   payload: { listId, taskId, newTaskStatus },
 });
+
+export type SetTasksAmountToRequireAction = {
+  type: typeof SET_TASKS_AMOUNT_TO_REQUIRE;
+};
+export const setTasksAmountToRequire = (): SetTasksAmountToRequireAction => {
+  return { type: SET_TASKS_AMOUNT_TO_REQUIRE };
+};
