@@ -39,8 +39,9 @@ import {
   LoginAction,
   checkAuthorization,
   login,
+  setTasksAmountToRequire,
 } from "./toDoReducer";
-import { getTasksAmountToRequire, getTasksTotalCount } from "./toDoSelectors";
+import { getTasksAmountToRequire } from "./toDoSelectors";
 
 export default function* rootSaga() {
   yield all([
@@ -178,6 +179,7 @@ export function* createTaskWorker(action: CreateTaskAction) {
 
     if (data.resultCode === 0) {
       const tasksAmountToRequire = yield select(getTasksAmountToRequire);
+      yield put(setTasksAmountToRequire(tasksAmountToRequire + 1));
       yield put(requireTasks(action.payload.listId, `${tasksAmountToRequire}`, "1"));
     } else {
       yield console.log("Ошибка при создании Таски: ", data.messages[0]);
@@ -195,10 +197,9 @@ export function* deleteTaskWorker(action: DeleteTaskAction) {
   try {
     const data: DeleteTaskResponse = yield call(tasksAPI.deleteTask, listId, taskId);
     if (data.resultCode === 0) {
-      const tasksTotalCount = yield select(getTasksTotalCount);
       const tasksAmountToRequire = yield select(getTasksAmountToRequire);
-      alert(tasksTotalCount === tasksAmountToRequire);
-      // Допилить проверку на кол-во загружаемых тасок если скролл удален.
+
+      yield put(setTasksAmountToRequire(tasksAmountToRequire - 1));
       yield put(requireTasks(listId, `${tasksAmountToRequire}`, "1"));
     } else {
       console.log(`Возникла ошибка на сервере во время удаления Таски: ${data.messages[0]}`);
@@ -219,7 +220,8 @@ export function* updateTaskWorker(action: UpdateTaskAction) {
     const data: UpdateTaskResponse = yield call(tasksAPI.updateTask, listId, taskId, newTaskStatus);
 
     if (data.resultCode === 0) {
-      yield put(requireTasks(listId, "15", "1"));
+      const tasksAmountToRequire = yield select(getTasksAmountToRequire);
+      yield put(requireTasks(listId, `${tasksAmountToRequire}`, "1"));
     } else {
       console.log(`Возникла ошибка на сервере во время изменения Таски: ${data.messages[0]}`);
     }

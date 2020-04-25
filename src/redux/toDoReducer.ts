@@ -76,7 +76,9 @@ const toDoReducer = (state = initialState, action: Action) => {
     case SET_TASKS_AMOUNT_TO_REQUIRE:
       return {
         ...state,
-        tasksAmountToRequire: state.tasksAmountToRequire + 1,
+        tasksAmountToRequire: action.payload
+          ? action.payload.newAmount
+          : state.tasksAmountToRequire + 1,
       };
     default:
       return state;
@@ -223,7 +225,9 @@ export const updateTask = (
 
 export type SetTasksAmountToRequireAction = {
   type: typeof SET_TASKS_AMOUNT_TO_REQUIRE;
+  payload?: { newAmount: number };
 };
-export const setTasksAmountToRequire = (): SetTasksAmountToRequireAction => {
-  return { type: SET_TASKS_AMOUNT_TO_REQUIRE };
+export const setTasksAmountToRequire = (newAmount?: number): SetTasksAmountToRequireAction => {
+  if (newAmount) return { type: SET_TASKS_AMOUNT_TO_REQUIRE, payload: { newAmount } };
+  else return { type: SET_TASKS_AMOUNT_TO_REQUIRE };
 };
