@@ -1,30 +1,31 @@
 {
   "files": {
     "main.css": "/to-do/static/css/main.10fad545.chunk.css",
-    "main.js": "/to-do/static/js/main.a95b83f5.chunk.js",
-    "main.js.map": "/to-do/static/js/main.a95b83f5.chunk.js.map",
+    "main.js": "/to-do/static/js/main.ff6fb5cc.chunk.js",
+    "main.js.map": "/to-do/static/js/main.ff6fb5cc.chunk.js.map",
     "runtime-main.js": "/to-do/static/js/runtime-main.c72cfefd.js",
     "runtime-main.js.map": "/to-do/static/js/runtime-main.c72cfefd.js.map",
-    "static/js/2.db75562d.chunk.js": "/to-do/static/js/2.db75562d.chunk.js",
-    "static/js/2.db75562d.chunk.js.map": "/to-do/static/js/2.db75562d.chunk.js.map",
+    "static/js/2.015319dc.chunk.js": "/to-do/static/js/2.015319dc.chunk.js",
+    "static/js/2.015319dc.chunk.js.map": "/to-do/static/js/2.015319dc.chunk.js.map",
     "index.html": "/to-do/index.html",
-    "precache-manifest.4eeb7902941f0097636912bf03e1f76f.js": "/to-do/precache-manifest.4eeb7902941f0097636912bf03e1f76f.js",
+    "precache-manifest.0081f4d2485298274c91abe7b55910b9.js": "/to-do/precache-manifest.0081f4d2485298274c91abe7b55910b9.js",
     "service-worker.js": "/to-do/service-worker.js",
     "static/css/main.10fad545.chunk.css.map": "/to-do/static/css/main.10fad545.chunk.css.map",
-    "static/js/2.db75562d.chunk.js.LICENSE.txt": "/to-do/static/js/2.db75562d.chunk.js.LICENSE.txt",
+    "static/js/2.015319dc.chunk.js.LICENSE.txt": "/to-do/static/js/2.015319dc.chunk.js.LICENSE.txt",
     "static/media/addTask.svg": "/to-do/static/media/addTask.00b634f5.svg",
     "static/media/deleteTask.svg": "/to-do/static/media/deleteTask.fa3eefef.svg",
     "static/media/mainPreloader.gif": "/to-do/static/media/mainPreloader.92bf5ea0.gif",
     "static/media/openMenu2.svg": "/to-do/static/media/openMenu2.01603b27.svg",
     "static/media/spinner.svg": "/to-do/static/media/spinner.19ee5868.svg",
     "static/media/success_tick.svg": "/to-do/static/media/success_tick.2951d77b.svg",
+    "static/media/switchOff.svg": "/to-do/static/media/switchOff.43e59237.svg",
     "static/media/switchOn.svg": "/to-do/static/media/switchOn.eb40b44b.svg",
     "static/media/unsuccess_tick2.svg": "/to-do/static/media/unsuccess_tick2.39fbd4e3.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.c72cfefd.js",
-    "static/js/2.db75562d.chunk.js",
+    "static/js/2.015319dc.chunk.js",
     "static/css/main.10fad545.chunk.css",
-    "static/js/main.a95b83f5.chunk.js"
+    "static/js/main.ff6fb5cc.chunk.js"
   ]
 }
